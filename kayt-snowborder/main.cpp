@@ -93,36 +93,59 @@ void calcolo_distanza(int n, atleta persona[])
 void confronta(int n, atleta persona[])
 {
     int k;
-    for(int i=0; i<n; i++)
+    for(int i=0; i<n-1; i++)
     {
-        k=i++;
-        for(int h=0; h<10;h++)
-        {
-            //if(persona[i].cor[h].x)
-        }
+        k=i+1;
+        if(persona[i].dis > persona[k].dis)
+            cout<<"il vincitore della gera ' l'atleta con n* matricola = "<<persona[i].mat<<" ed ha compiuto "<<persona[i].dis<<" m";
 
-
-    }
+   }
 }
 
 int main()
 {
     atleta persona[500];
     int s, n;
-    do{
-        cout<<"";
-        cin>>s;
+    string decisione;
+    cout<<"-Salve, hai la possibilita' di avviare una gara tra Kayt-Snowborder. Desideri continuare (si/no): ";
+    cin>>decisione;
 
-        switch(s)
-        {
-        case 1: cout<<"-quanti partecipanti vuoi in gara?";
-                cin>>n;
-               genere(n,persona);
-               scrivi(n,persona);
-               calcolo_distanza(n,  persona);
-               break;
-        }
-    }while(s!= 3);
+   if(decisione=="si")
+   {
+       cout<<"quanti partecipanti vuoi in gara?";
+       cin>>n;
+       do{
+         cout<<"1- visualizzare elenco degli atleti "<<endl;
+         cout<<"2- visualizzare il vincitore della competizione"<<endl;
+         cout<<"3- visualizzare la classifica degli atleti"<<endl;
+         cout<<"4- scegliere un'atleta e visualizzare il suo percorso"<<endl;
+         cout<<"5-uscita"<<endl;
+         cin>>s;
+
+         switch(s)
+         {
+          case 1:
+                    genere(n,persona);
+                    scrivi(n,persona);
+                    break;
+
+          case 2:   calcolo_distanza(n,  persona);
+                    break;
+          case 3: break;
+          case 4: break;
+          case 5: break;
+
+          }
+        }while(s!= 5);
+     }
+
+
+    else if(decisione=="no")
+    cout<<"Mi dispiace, hai perszo la tua occasione... CIAOOO";
+
+    else cout<<"opss... inserimento sbagliato";
+
+
 
 return 0;
 }
