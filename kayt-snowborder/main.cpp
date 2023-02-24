@@ -3,6 +3,7 @@
 #include<ctime>
 #include <math.h>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -79,32 +80,78 @@ void calcolo_distanza(int n, atleta persona[])
     for(int c=0; c<n; c++)
     {
       d=0;
+      persona[c].dis=0;
       for(int i=0; i<29; i++)
       {
             k = i+1;
             d= sqrt(pow(persona[c].cor[i].x-persona[c].cor[k].x, 2)+ pow(persona[c].cor[i].y-persona[c].cor[k].y, 2) );
             persona[c].dis+=+d;
             //cout<<d<<endl;
-            cout<<persona[c].dis<<endl;
+
       }
     }
 }
 
-void confronta(int n, atleta persona[])
+void ordinamento(int n, atleta persona[])
 {
-    int k;
-    for(int i=0; i<n-1; i++)
-    {
-        k=i+1;
-        if(persona[i].dis > persona[k].dis)
-            cout<<"il vincitore della gera ' l'atleta con n* matricola = "<<persona[i].mat<<" ed ha compiuto "<<persona[i].dis<<" m";
-
-   }
+      ordinamento(n,persona);
+     for(int c=0; c<n-1; c++)
+     {
+         for(int t=c+1; t<n; t++)
+         {
+             if(persona[c].dis > persona[t].dis)
+                 std::swap(persona[c], persona[t]);
+         }
+     }
 }
+
+void stampa_dis(int n, atleta persona[])
+{
+    calcolo_distanza(n,  persona);
+    ofstream fout("kayt.txt", ios::app);
+    fout<<"__________________________________________________________________________"<<endl;
+     for(int c=0; c<n; c++)
+     {
+          cout<<endl<<"* " <<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
+          fout<<"* " <<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
+     }
+     fout.close();
+
+}
+
+
+void vincitore(int n, atleta persona[])
+{
+   ofstream fout("kayt.txt", ios::app);
+   ordinamento(n,persona);
+   calcolo_distanza(n,  persona);
+
+     cout<<endl<<"il vincitore della gera e' l'atleta con n. matricola = "<<persona[0].mat<<" ed ha compiuto "<<persona[0].dis<<" m"<<endl;
+     fout<<"__________________________________________________________________________"<<endl;
+     fout<<endl<<endl<<"il vincitore della gera e' l'atleta con n. matricola = "<<persona[0].mat<<" ed ha compiuto "<<persona[0].dis<<" m"<<endl;
+
+   fout.close();
+}
+
+void grafica(int n, atleta persona[])
+{
+    char m[100][100];
+
+
+    for(int i=0; i<100; i++)
+    {
+        for(int j=0; j<100; j++)
+        {
+            m[i][j]=' ';
+        }
+    }
+}
+
 
 int main()
 {
     atleta persona[500];
+    //coordinate cor;
     int s, n;
     string decisione;
     cout<<"-Salve, hai la possibilita' di avviare una gara tra Kayt-Snowborder. Desideri continuare (si/no): ";
@@ -116,10 +163,11 @@ int main()
        cin>>n;
        do{
          cout<<"1- visualizzare elenco degli atleti "<<endl;
-         cout<<"2- visualizzare il vincitore della competizione"<<endl;
-         cout<<"3- visualizzare la classifica degli atleti"<<endl;
+         cout<<"2- visualizzare la classifica degli atleti"<<endl;
+         cout<<"3- visualizzare il vincitore della competizione"<<endl;
          cout<<"4- scegliere un'atleta e visualizzare il suo percorso"<<endl;
-         cout<<"5-uscita"<<endl;
+         cout<<"5- uscita"<<endl;
+
          cin>>s;
 
          switch(s)
@@ -129,10 +177,15 @@ int main()
                     scrivi(n,persona);
                     break;
 
-          case 2:   calcolo_distanza(n,  persona);
+          case 2:
+                  stampa_dis( n,  persona);
                     break;
-          case 3: break;
-          case 4: break;
+
+          case 3: vincitore(n,persona);
+                  break;
+          case 4:
+
+                  break;
           case 5: break;
 
           }
