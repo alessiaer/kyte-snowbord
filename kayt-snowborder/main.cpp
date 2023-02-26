@@ -26,10 +26,13 @@ void scrivi(int n, atleta persona[])
    for(int h=0; h<n;h++)
    {
        fout<<"* " <<persona[h].mat<<" - "<< persona[h].cog[h]<<endl;
+       cout<<"* " <<persona[h].mat<<" - "<< persona[h].cog[h]<<endl;
        for(int i=0; i<10; i++)
         {
             fout<<'\t'<<"("<<persona[h].cor[i].x<<" ; "<<persona[h].cor[i].y<<")"<<endl;
+             cout<<'\t'<<"("<<persona[h].cor[i].x<<" ; "<<persona[h].cor[i].y<<")"<<endl;
         }
+        cout<<endl;
    }
    fout.close();
 }
@@ -61,16 +64,12 @@ void genere(int n, atleta persona[])
            if( persona[c].mat== persona[j].mat)
                 goto ripeti;
         }
-        cout<<"* " <<persona[c].mat<<" - "<< persona[c].cog[c]<<endl;
+
         for(int i=0; i<30; i++)
         {
             persona[c].cor[i].x=rand()%100;
             persona[c].cor[i].y=rand()%100;
-
-            cout<<'\t'<<"("<<persona[c].cor[i].x<<" ; "<<persona[c].cor[i].y<<")"<<endl;
         }
-        cout<<endl;
-
     }
 }
 
@@ -94,12 +93,12 @@ void calcolo_distanza(int n, atleta persona[])
 
 void ordinamento(int n, atleta persona[])
 {
-      ordinamento(n,persona);
+
      for(int c=0; c<n-1; c++)
      {
          for(int t=c+1; t<n; t++)
          {
-             if(persona[c].dis > persona[t].dis)
+             if(persona[c].dis < persona[t].dis)
                  std::swap(persona[c], persona[t]);
          }
      }
@@ -108,12 +107,13 @@ void ordinamento(int n, atleta persona[])
 void stampa_dis(int n, atleta persona[])
 {
     calcolo_distanza(n,  persona);
+    ordinamento(n,persona);
     ofstream fout("kayt.txt", ios::app);
     fout<<"__________________________________________________________________________"<<endl;
      for(int c=0; c<n; c++)
      {
-          cout<<endl<<"* " <<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
-          fout<<"* " <<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
+          cout<<c+1<<") "<<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
+          fout<<c+1<<") "<<persona[c].mat<<" - "<< persona[c].cog[c]<<" - "<< persona[c].dis<<endl;
      }
      fout.close();
 
@@ -123,8 +123,8 @@ void stampa_dis(int n, atleta persona[])
 void vincitore(int n, atleta persona[])
 {
    ofstream fout("kayt.txt", ios::app);
-   ordinamento(n,persona);
    calcolo_distanza(n,  persona);
+   ordinamento(n,persona);
 
      cout<<endl<<"il vincitore della gera e' l'atleta con n. matricola = "<<persona[0].mat<<" ed ha compiuto "<<persona[0].dis<<" m"<<endl;
      fout<<"__________________________________________________________________________"<<endl;
@@ -137,14 +137,50 @@ void grafica(int n, atleta persona[])
 {
     char m[100][100];
 
-
     for(int i=0; i<100; i++)
     {
         for(int j=0; j<100; j++)
         {
             m[i][j]=' ';
+
         }
     }
+
+    for(int i=0; i<100; i++)
+    {
+        for(int j=0; j<100; j++)
+        {
+            m[i][0]='|';
+            m[0][j]='_';
+        }
+    }
+    int app, i;
+    cout<<"scegli il numero di matricola di cui vuoi visualizzare il percorso grafico: ";
+    cin>>app;
+
+
+
+     for(int c=0; c<n; c++)
+    {
+      if(app==persona[c].mat)
+      {
+
+       for( i=0; i<30; i++)
+         {
+             m[persona[c].cor[1].x][persona[c].cor[1].y]='*';
+         }
+       }
+    }
+
+    for(int i=0; i<100; i++)
+    {
+        for(int j=0; j<100; j++)
+        {
+            cout<<m[i][j];
+
+        } cout<<endl;
+    }
+
 }
 
 
@@ -161,6 +197,7 @@ int main()
    {
        cout<<"quanti partecipanti vuoi in gara?";
        cin>>n;
+       genere(n,persona);
        do{
          cout<<"1- visualizzare elenco degli atleti "<<endl;
          cout<<"2- visualizzare la classifica degli atleti"<<endl;
@@ -173,7 +210,7 @@ int main()
          switch(s)
          {
           case 1:
-                    genere(n,persona);
+
                     scrivi(n,persona);
                     break;
 
@@ -183,7 +220,7 @@ int main()
 
           case 3: vincitore(n,persona);
                   break;
-          case 4:
+          case 4:grafica (n,persona);
 
                   break;
           case 5: break;
