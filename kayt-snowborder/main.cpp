@@ -167,7 +167,7 @@ void grafica(int n, atleta persona[])
 
        for( i=0; i<30; i++)
          {
-             m[persona[c].cor[1].x][persona[c].cor[1].y]='*';
+             m[persona[c].cor[i].x][persona[c].cor[i].y]='*';
          }
        }
     }
