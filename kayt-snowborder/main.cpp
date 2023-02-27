@@ -4,23 +4,56 @@
 #include <math.h>
 #include <iomanip>
 #include <algorithm>
-
+/*!
+@author alessiaer
+@file main.cpp
+@brief programma in c++ che permette di monitorare una gara di kayt-snowborder
+ */
 using namespace std;
 
+/*!
+ @struct coordinate
+ @brief struttura che serve per dichiarare le variabili opportune per la rilevazione delle coordinate
+ */
 struct coordinate
  {
+/*! @var x
+    @brief variabile x delle coordinate
+    @var y
+    @brief variabile y delle coordinate */
      int x, y;
  };
+
+ /*!
+ @struct atleta
+ @brief struttura che serve per dichiarare le variabili contenute nella struttura atleta
+ */
 struct atleta
 {
+ /*! @var mat
+     @brief matrice identificativa dell'atleta */
     int mat;
+
+/*! @var cog
+    @brief cognome dell'atlteta */
     string cog[100]= {"Rossi","Russo","Ferrari","Esposito","Bianchi","Romano","Colombo","Bruno","Ricci","Marino","Costa","Franco","Gallo","Conti","Greco","Martino","Giordano","Rizzo","Mancini","Villa","Mauro","Lombardi","Fontana","Roberto","Barbieri","Moretti","Bianco","Martini","Fratelli","Mariani","Rinaldi","Amato","Galli","Ferrara","Caruso","Leone","Mario","Santoro","Longo","Conte","Sala","Martinelli","Serra","D'Angelo","Dalla"	,"Marchetti","Marini","Salvatore","Fabbri","Fiore","Ferri","Gentile","Gatti","Palma","Monti","Soc","Vitale","Lombardo","De Luca","Bernardi","Pellegrini","Messina","Benedetti","Massimo","Coppola","Morelli","Grassi","Testa","Marchi","Parisi","Ferraro","Michele","Santis","Rocca","Valentini","Riva","Agostino","Angelis","Palumbo","Pasquale","Giorgi","Farina","Silvestri","Sanna","Rizzi","Cattaneo","Poli","Mazza","Paola","Lombardi","Pellegrino","Piazza","Leo","Orlando","Carbone","Re","Moro","Neri","Giuliani","Guerra"};
+
+/*! @var cor
+    @brief cordinate dei punti rilevati in 30 min degli atleti */
     coordinate cor[30];
     int dis;
 };
 
+/*!
+ @fn scrivi
+ @brief visualizza sullo schermo e scrive il file le informazioni degli atleti
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+
+*/
 void scrivi(int n, atleta persona[])
 {
+
    ofstream fout("kayt.txt");
    fout<<"";
    for(int h=0; h<n;h++)
@@ -37,18 +70,12 @@ void scrivi(int n, atleta persona[])
    fout.close();
 }
 
-void visualizza()
-{
-    ifstream fin ("kayt.txt");
-    string app;
-    while(!fin.eof())
-    {
-        getline(fin,app);
-        cout<<"\t"<<app<<endl;
-    }
-    fin.close();
-}
-
+/*!
+ @fn genera
+ @brief generazione casuale della matrice, delle coordinate e scelta casuale dei cognomi da assegnare ai vari atleti
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void genere(int n, atleta persona[])
 {
     srand(time(NULL));
@@ -73,6 +100,12 @@ void genere(int n, atleta persona[])
     }
 }
 
+/*!
+ @fn calcolo_distanza
+ @brief calcola la distanza tra i vari punti di ogni atleta e li somma tra di loro, ottenendo la distanza totale percorsa da ogni persona.
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void calcolo_distanza(int n, atleta persona[])
 {
     int d, k;
@@ -91,6 +124,12 @@ void calcolo_distanza(int n, atleta persona[])
     }
 }
 
+/*!
+ @fn ordinamento
+ @brief confronta le distanze di ogni atleta e ordina gli atleti in modo decrescente partendo da colui che ha percorso la distanza maggiore
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void ordinamento(int n, atleta persona[])
 {
 
@@ -104,6 +143,12 @@ void ordinamento(int n, atleta persona[])
      }
 }
 
+/*!
+ @fn stampa_dis
+ @brief richiama la funzione di ordinamento , visualizza sullo schermo la classifica degli atleti e le inserisce nel file
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void stampa_dis(int n, atleta persona[])
 {
     calcolo_distanza(n,  persona);
@@ -119,7 +164,12 @@ void stampa_dis(int n, atleta persona[])
 
 }
 
-
+/*!
+ @fn vincitore
+ @brief  visualizza sullo schermo e nel file di testo il vincitore della gara
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void vincitore(int n, atleta persona[])
 {
    ofstream fout("kayt.txt", ios::app);
@@ -133,6 +183,12 @@ void vincitore(int n, atleta persona[])
    fout.close();
 }
 
+/*!
+ @fn grafica
+ @brief  scelta dell' utente su quale atleta voler monitorare e stampa a video dei punti sul piano cartesiano che sono stati registrati dalla commmissione
+ @param[in] n numero degli atleti
+ @param[in] persona vettore di atleta
+*/
 void grafica(int n, atleta persona[])
 {
     char m[100][100];
@@ -159,7 +215,7 @@ void grafica(int n, atleta persona[])
     cin>>app;
 
 
-
+int a=1;
      for(int c=0; c<n; c++)
     {
       if(app==persona[c].mat)
@@ -167,7 +223,8 @@ void grafica(int n, atleta persona[])
 
        for( i=0; i<30; i++)
          {
-             m[persona[c].cor[i].x][persona[c].cor[i].y]='*';
+             m[persona[c].cor[i].x][persona[c].cor[i].y]=a;
+             a++;
          }
        }
     }
@@ -183,6 +240,11 @@ void grafica(int n, atleta persona[])
 
 }
 
+/*!
+ @fn main
+ @brief  permette all'utente di eseguire il programma
+
+*/
 
 int main()
 {
